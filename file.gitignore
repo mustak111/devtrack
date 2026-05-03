@@ -1,0 +1,22 @@
+# Maven
+target/
+*.log
+
+# IntelliJ
+.idea/
+*.iml
+
+# OS
+.DS_Store
+
+# Env files
+.env
+
+# Logs
+logs/
+
+# MySQL dump
+*.sql
+
+# application secrets
+application-local.yml
