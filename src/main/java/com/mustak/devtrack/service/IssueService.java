@@ -17,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.mustak.devtrack.specification.IssueSpecification;
+import com.mustak.devtrack.enums.Priority;
 
 @Service
 @RequiredArgsConstructor
@@ -119,6 +121,18 @@ public class IssueService {
         Issue issue = findIssueById(id);
         issueRepository.delete(issue);
     }
+    // Add Filter Method
+    public Page<IssueResponse> filterIssues(
+            Status status,
+            Priority priority,
+            Long assigneeId,
+            String keyword,
+            Pageable pageable) {
+        return issueRepository.findAll(
+                IssueSpecification.filterIssues(status, priority, assigneeId, keyword),
+                pageable
+        ).map(this::mapToResponse);
+    }
 
     // ============ Helper Methods ============
 
@@ -168,4 +182,5 @@ public class IssueService {
                 .role(user.getRole())
                 .build();
     }
+
 }
