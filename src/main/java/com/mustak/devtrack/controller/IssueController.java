@@ -16,6 +16,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import com.mustak.devtrack.enums.Priority;
+import com.mustak.devtrack.enums.Status;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/issues")
@@ -76,5 +80,18 @@ public class IssueController {
     public ResponseEntity<Void> deleteIssue(@PathVariable Long id) {
         issueService.deleteIssue(id);
         return ResponseEntity.noContent().build();
+    }
+    // Add Filter Endpoint
+    @GetMapping("/filter")
+    public ResponseEntity<Page<IssueResponse>> filterIssues(
+            @RequestParam(required = false) Status status,
+            @RequestParam(required = false) Priority priority,
+            @RequestParam(required = false) Long assigneeId,
+            @RequestParam(required = false) String keyword,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
+            Pageable pageable) {
+        return ResponseEntity.ok(
+                issueService.filterIssues(status, priority, assigneeId, keyword, pageable)
+        );
     }
 }
